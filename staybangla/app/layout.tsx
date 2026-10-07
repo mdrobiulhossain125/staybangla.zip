@@ -1,0 +1,9 @@
+import "./globals.css";import type {Metadata} from "next";import {Noto_Sans_Bengali,Plus_Jakarta_Sans} from "next/font/google";import {cookies} from "next/headers";import Link from "next/link";import LangSwitch from "@/components/LangSwitch";
+const f=Noto_Sans_Bengali({subsets:["bengali"],variable:"--font-bn",weight:["400","500","700"]});const j=Plus_Jakarta_Sans({subsets:["latin"],variable:"--font-lat",weight:["400","500","600","700","800"]});
+export const metadata:Metadata={metadataBase:new URL("https://staybangla.com"),title:{default:"StayBangla – কম খরচে হোটেল ও হোস্টেল",template:"%s | StayBangla"},description:"Cheap hotels, hostels and low budget rooms in every district of Bangladesh. Call owners directly."};
+export default async function L({children}:{children:React.ReactNode}){const en=(await cookies()).get("lang")?.value==="en";
+return <html lang={en?"en":"bn"} className={`${f.variable} ${j.variable}`}><body className="font-sans">
+<header className="sticky top-0 z-10 border-b bg-white/90 backdrop-blur"><nav className="mx-auto flex max-w-6xl items-center justify-between p-4">
+<Link href="/" className="text-xl font-bold text-brand">StayBangla</Link>
+<div className="flex items-center gap-4 text-sm"><Link href="/hostels" className="font-medium hover:text-brand">{en?"Hostels":"হোস্টেল"}</Link><Link href="/dashboard" className="font-medium hover:text-brand">{en?"Dashboard":"ড্যাশবোর্ড"}</Link><Link href="/dashboard/new" className="rounded-full bg-brand px-4 py-2 font-semibold text-white hover:bg-brand-dark">{en?"List property":"যুক্ত করুন"}</Link><LangSwitch en={en}/></div></nav></header>
+{children}<footer className="mt-16 border-t p-8 text-center text-sm text-slate-700">© StayBangla – {en?"Information only. No booking or payment.":"শুধু তথ্য। কোনো বুকিং বা পেমেন্ট নেই।"}</footer></body></html>}

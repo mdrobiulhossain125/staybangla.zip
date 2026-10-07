@@ -1,0 +1,8 @@
+import {revalidatePath} from "next/cache";import {createClient} from "@/lib/supabase/server";
+async function review(f:FormData){"use server";const sb=await createClient();const {data:{user}}=await sb.auth.getUser();if(!user)return;
+const id=String(f.get("id")),status=String(f.get("s"));if(!["approved","rejected","suspended","pending"].includes(status))return;
+const {data:row}=await sb.from("properties").update({status,rejection_reason:status==="rejected"?String(f.get("reason")||"Please review your details."):null}).eq("id",id).select("owner_id,name").single(); // RLS: admin only
+if(row){await sb.from("audit_logs").insert({actor_id:user.id,action:`property.${status}`,entity:"property",entity_id:id});await sb.from("notifications").insert({user_id:row.owner_id,title:`${row.name} is ${status}`})}revalidatePath("/admin")}
+export default async function Admin(){const sb=await createClient();const {data}=await sb.from("properties").select("id,name,phone,status,district").order("created_at",{ascending:false});
+return <main className="mx-auto max-w-4xl p-4"><h1 className="mb-4 text-2xl">Admin: properties</h1>{!data?.length&&<p>No properties yet.</p>}{data?.map(h=><div key={h.id} className="flex flex-wrap items-center justify-between gap-2 border-b py-3"><div><b>{h.name}</b> <span className="text-sm text-slate-700">{h.district} · {h.phone} · {h.status}</span></div>
+<form action={review} className="flex gap-2"><input type="hidden" name="id" value={h.id}/><input name="reason" placeholder="Reason (if rejecting)" className="rounded-xl border p-2 text-sm"/>{["approved","rejected","suspended"].map(s=><button key={s} name="s" value={s} className="rounded-full border px-3 py-1 text-sm font-medium">{s}</button>)}</form></div>)}</main>}

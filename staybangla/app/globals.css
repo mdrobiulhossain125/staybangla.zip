@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@theme{--color-brand:#007f73;--color-brand-dark:#005f56;--color-soft:#e8f7f4;--color-ink:#0a2530;--font-sans:var(--font-lat),var(--font-bn),system-ui,sans-serif}
+body{background:#fff;color:var(--color-ink);-webkit-font-smoothing:antialiased;letter-spacing:-.005em}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;color:#06202b}
+input,select,textarea{background:#fff}input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--color-brand);outline-offset:2px}

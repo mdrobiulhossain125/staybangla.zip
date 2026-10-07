@@ -1,0 +1,1 @@
+"use client";export default function E({reset}:{reset:()=>void}){return <main className="p-10 text-center"><p className="font-medium">Something went wrong. Please try again.</p><button onClick={reset} className="mt-3 rounded-full bg-brand px-5 py-2 text-white">Retry</button></main>}
